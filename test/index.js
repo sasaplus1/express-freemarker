@@ -10,14 +10,22 @@ describe(metadata.name, function() {
     var getTemplatesDir = expressFreemarker.getTemplatesDir;
 
     it('should be return `templates` dir', function() {
-      var template = path.resolve(__dirname, 'getTemplatesDir/templates/index.ftl');
+      var template = path.resolve(
+        __dirname,
+        'getTemplatesDir/templates/index.ftl'
+      );
 
-      assert(getTemplatesDir(template) === path.resolve(__dirname, 'getTemplatesDir/templates'));
+      assert(
+        getTemplatesDir(template) ===
+          path.resolve(__dirname, 'getTemplatesDir/templates')
+      );
     });
-    it('should be return file\'s dir', function() {
+    it("should be return file's dir", function() {
       var template = path.resolve(__dirname, 'getTemplatesDir/index.ftl');
 
-      assert(getTemplatesDir(template) === path.resolve(__dirname, 'getTemplatesDir'));
+      assert(
+        getTemplatesDir(template) === path.resolve(__dirname, 'getTemplatesDir')
+      );
     });
   });
   describe('engine', function() {

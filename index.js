@@ -3,7 +3,6 @@
  * because it will use in legacy environment.
  */
 
-var fs = require('fs');
 var path = require('path');
 
 var FreeMarker = require('freemarker');
@@ -23,7 +22,9 @@ function getTemplatesDir(filePath) {
     dirPath = path.resolve(dirPath, '..');
   }
 
-  return path.basename(dirPath) === 'templates' ? dirPath : path.dirname(filePath);
+  return path.basename(dirPath) === 'templates'
+    ? dirPath
+    : path.dirname(filePath);
 }
 
 /**
@@ -34,9 +35,11 @@ function getTemplatesDir(filePath) {
  * @param {Function} callback
  */
 function engine(filePath, options, callback) {
-  var renderer = this.renderer || new FreeMarker({
-    root: getTemplatesDir(filePath)
-  });
+  var renderer =
+    this.renderer ||
+    new FreeMarker({
+      root: getTemplatesDir(filePath)
+    });
 
   // NOTE: render function is throw `The source file is not inside the souce root` error,
   // because create file in temp dir.
@@ -59,9 +62,14 @@ function bindConfigs(configs) {
   return function(filePath, options, callback) {
     var renderer = new FreeMarker(configs || {});
 
-    return engine.call({
-      renderer: renderer
-    }, filePath, options, callback);
+    return engine.call(
+      {
+        renderer: renderer
+      },
+      filePath,
+      options,
+      callback
+    );
   };
 }
 
