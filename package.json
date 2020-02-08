@@ -7,9 +7,14 @@
     "freemarker": "^2.1.0"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^7.0.1",
-    "power-assert": "^1.6.1"
+    "power-assert": "^1.6.1",
+    "prettier": "^1.19.1"
   },
   "files": [
     "index.js"
@@ -23,7 +28,9 @@
     "url": "https://github.com/sasaplus1/express-freemarker.git"
   },
   "scripts": {
+    "fix": "eslint --cache --fix .",
     "fixpack": "npx fixpack",
+    "lint": "eslint --cache .",
     "mocha": "mocha",
     "pretest": "docker build --tag sasaplus1/express-freemarker .",
     "test": "docker run --rm sasaplus1/express-freemarker yarn run mocha"
