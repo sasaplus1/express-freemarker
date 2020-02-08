@@ -28,6 +28,4 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn install --frozen-lockfile
       - run: yarn lint
-      - uses: ./Dockerfile
-        with:
-          args: yarn mocha
+      - run: yarn test
