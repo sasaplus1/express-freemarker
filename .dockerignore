@@ -1,0 +1,6 @@
+*
+!.mocharc.js
+!index.js
+!package.json
+!test
+!yarn.lock
