@@ -1,5 +1,5 @@
 module.exports = {
-  '*.js': 'npx eslint',
+  '*.js': 'npx eslint --cache',
   '*.yml': [
     'npx prettier --parser yaml --write',
     'git diff --exit-code --quiet'
