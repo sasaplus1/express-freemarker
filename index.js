@@ -43,7 +43,7 @@ function engine(filePath, options, callback) {
 
   // NOTE: render function is throw `The source file is not inside the souce root` error,
   // because create file in temp dir.
-  renderer.renderFile(filePath, options, function(err, result) {
+  renderer.renderFile(filePath, options, function (err, result) {
     if (err) {
       return callback(err);
     }
@@ -59,7 +59,7 @@ function engine(filePath, options, callback) {
  * @return {Function}
  */
 function bindConfigs(configs) {
-  return function(filePath, options, callback) {
+  return function (filePath, options, callback) {
     var renderer = new FreeMarker(configs || {});
 
     return engine.call(
