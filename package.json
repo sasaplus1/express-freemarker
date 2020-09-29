@@ -31,7 +31,7 @@
     "url": "https://github.com/sasaplus1/express-freemarker.git"
   },
   "scripts": {
-    "fix": "eslint --cache --fix .",
+    "fix": "eslint --fix .",
     "fixpack": "npx fixpack",
     "lint": "eslint --cache .",
     "mocha": "mocha",
