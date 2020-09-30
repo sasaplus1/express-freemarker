@@ -36,6 +36,7 @@
     "lint": "eslint --cache .",
     "mocha": "mocha",
     "pretest": "DOCKER_BUILDKIT=1 docker build --tag sasaplus1/express-freemarker .",
+    "sh": "docker run --rm -it -v \"$PWD:/opt/express-freemarker\" sasaplus1/express-freemarker bash",
     "test": "docker run --rm sasaplus1/express-freemarker yarn run mocha"
   }
 }
