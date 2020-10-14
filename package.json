@@ -34,16 +34,18 @@
     "url": "https://github.com/sasaplus1/express-freemarker.git"
   },
   "scripts": {
+    "build": "tsc",
     "fix": "run-s fix:eslint fix:prettier",
-    "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier --write .",
+    "fix:eslint": "eslint --ext .ts --fix .",
+    "fix:prettier": "prettier --write --parser typescript .",
     "fixpack": "npx fixpack",
     "lint": "run-s lint:eslint lint:prettier",
-    "lint:eslint": "eslint --cache .",
-    "lint:prettier": "prettier --check .",
+    "lint:eslint": "eslint --cache --ext .ts .",
+    "lint:prettier": "prettier --check --parser typescript .",
     "mocha": "mocha",
     "pretest": "DOCKER_BUILDKIT=1 docker build --tag sasaplus1/express-freemarker .",
     "sh": "docker run --rm -it -v \"$PWD:/opt/express-freemarker\" sasaplus1/express-freemarker bash",
-    "test": "docker run --rm -t sasaplus1/express-freemarker yarn run mocha"
+    "test": "docker run --rm -t sasaplus1/express-freemarker yarn run mocha",
+    "watch": "tsc --watch"
   }
 }
