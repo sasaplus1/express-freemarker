@@ -2,11 +2,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:node/recommended',
-    'plugin:prettier/recommended'
-  ],
+  extends: ['eslint:recommended', 'plugin:node/recommended', 'prettier'],
   overrides: [
     {
       env: {
