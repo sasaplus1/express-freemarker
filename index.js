@@ -1,80 +1,29 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.engine = void 0;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore 7016
+var freemarker_js_1 = require("freemarker.js");
 /**
- * NOTE: This script written in old-style JavaScript,
- * because it will use in legacy environment.
- */
-
-var path = require('path');
-
-var FreeMarker = require('freemarker');
-
-/**
- * get templates directory path from file
+ * render engine
  *
- * @param {string} filePath
- * @return {string}
+ * @param filePath
+ * @param options
+ * @param data
+ * @param callback
  */
-function getTemplatesDir(filePath) {
-  var dirPath = path.resolve(filePath);
-  var root = path.parse(filePath).root;
-
-  // break if dirPath is `templates` or root
-  while (path.basename(dirPath) !== 'templates' && dirPath !== root) {
-    dirPath = path.resolve(dirPath, '..');
-  }
-
-  return path.basename(dirPath) === 'templates'
-    ? dirPath
-    : path.dirname(filePath);
-}
-
-/**
- * render function for FreeMarker
- *
- * @param {string} filePath
- * @param {Object} options
- * @param {Function} callback
- */
-function engine(filePath, options, callback) {
-  var renderer =
-    this.renderer ||
-    new FreeMarker({
-      root: getTemplatesDir(filePath)
+function engine(filePath, 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+options, 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+data, callback) {
+    var renderer = new freemarker_js_1.default(options);
+    renderer.render(filePath, data, function (err, html, output) {
+        if (err) {
+            return callback(err, '', output);
+        }
+        callback(null, html, output);
     });
-
-  // NOTE: render function is throw `The source file is not inside the souce root` error,
-  // because create file in temp dir.
-  renderer.renderFile(filePath, options, function (err, result) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, result);
-  });
 }
-
-/**
- * bind configs for FreeMarker and get render function
- *
- * @param {Object} configs
- * @return {Function}
- */
-function bindConfigs(configs) {
-  return function (filePath, options, callback) {
-    var renderer = new FreeMarker(configs || {});
-
-    return engine.call(
-      {
-        renderer: renderer
-      },
-      filePath,
-      options,
-      callback
-    );
-  };
-}
-
-bindConfigs.getTemplatesDir = getTemplatesDir;
-bindConfigs.engine = engine;
-bindConfigs.bindConfigs = bindConfigs;
-
-module.exports = bindConfigs;
+exports.engine = engine;
+//# sourceMappingURL=index.js.map
