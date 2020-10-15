@@ -1,96 +1,104 @@
-var assert = require('assert');
-var http = require('http');
-var path = require('path');
+import assert = require('assert');
 
-var express = require('express');
+import * as http from 'http';
+import * as path from 'path';
 
-var expressFreemarker = require('../');
+import * as express from 'express';
 
-var metadata = require('../package');
+import { engine } from '../';
 
-describe(metadata.name, function () {
-  describe('getTemplatesDir', function () {
-    var getTemplatesDir = expressFreemarker.getTemplatesDir;
-
-    it('should be return `templates` dir', function () {
-      var template = path.resolve(
-        __dirname,
-        'getTemplatesDir/templates/index.ftl'
-      );
-
-      assert(
-        getTemplatesDir(template) ===
-          path.resolve(__dirname, 'getTemplatesDir/templates')
-      );
-    });
-    it("should be return file's dir", function () {
-      var template = path.resolve(__dirname, 'getTemplatesDir/index.ftl');
-
-      assert(
-        getTemplatesDir(template) === path.resolve(__dirname, 'getTemplatesDir')
-      );
-    });
-  });
+describe('express-freemarker', function () {
   describe('engine', function () {
-    var engine = expressFreemarker.engine;
-
     it('should render FreeMarker', function (done) {
-      var template = path.resolve(__dirname, 'engine/index.ftl');
+      engine(
+        'engine/index.ftl',
+        { viewRoot: path.resolve(__dirname) },
+        { message: 'Works!' },
+        function (err, html, output) {
+          if (err) {
+            err.message += '\n';
+            err.message += output;
 
-      engine(template, {}, function (err, html) {
-        if (err) {
-          return done(err);
+            return done(err);
+          }
+
+          assert(html === '<p>Hello, World!</p>\n<h1>It, Works!</h1>\n');
+
+          done();
         }
-
-        assert(html === '<p>Hello, World!</p>\n');
-
-        done();
-      });
+      );
     });
     it('should render FreeMarker within include', function (done) {
-      var template = path.resolve(__dirname, 'engine/templates/main/index.ftl');
+      engine(
+        'engine/templates/main/index.ftl',
+        {
+          viewRoot: path.resolve(__dirname),
+          options: {
+            // HACK: convert to TDD syntax
+            // http://fmpp.sourceforge.net/tdd.html
+            freemarkerLinks: JSON.stringify({
+              root: [path.resolve(__dirname, 'engine/templates')]
+            })
+          }
+        },
+        {},
+        function (err, html, output) {
+          if (err) {
+            err.message += '\n';
+            err.message += output;
 
-      engine(template, {}, function (err, html) {
-        if (err) {
-          return done(err);
+            return done(err);
+          }
+
+          assert(html === '<header>It Works!</header>\n<p>Hello!</p>\n');
+
+          done();
         }
-
-        assert(html === '<header>It Works!</header>\n<p>Hello!</p>\n');
-
-        done();
-      });
-    });
-  });
-  describe('bindConfigs', function () {
-    var bindConfigs = expressFreemarker.bindConfigs;
-
-    it('should return render function', function () {
-      var renderer = bindConfigs({ suffix: 'ftl' });
-
-      assert(typeof renderer === 'function');
-      assert(renderer.length === 3);
+      );
     });
   });
   describe('use with Express', function () {
     it('should response rendered HTML', function (done) {
-      var app = express();
-      var port = 3939;
-      var server;
+      const app = express();
+      const port = 3939;
 
-      app.engine('ftl', expressFreemarker.engine);
+      const renderer = function (
+        filePath: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: Record<string, any>,
+        callback: (err: Error | null, content: string) => void
+      ) {
+        const viewRoot = app.get('views');
+
+        engine(
+          filePath.replace(viewRoot, ''),
+          {
+            viewRoot,
+            options: {
+              freemarkerLinks: JSON.stringify({
+                root: [path.resolve(__dirname, 'engine/templates')]
+              })
+            }
+          },
+          data,
+          callback
+        );
+      };
+
+      app.engine('ftl', renderer);
       app.set('view engine', 'ftl');
-      app.set('views', path.join(__dirname, 'engine/templates'));
+      app.set('views', path.resolve(__dirname, 'engine/templates'));
 
       app.get('/', function (req, res) {
-        res.render('main/index.ftl');
+        res.render('main/index.ftl', {});
       });
 
-      server = app.listen(port, function () {
-        var url = 'http://127.0.0.1:' + port + '/';
+      const server = app.listen(port, function () {
+        const url = 'http://127.0.0.1:' + port + '/';
 
         http
           .request(url, function (res) {
-            var buffer = '';
+            let buffer = '';
 
             if (res.statusCode < 200 || res.statusCode > 300) {
               return done(new Error('response code is not 2xx'));
