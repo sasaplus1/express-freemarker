@@ -1,9 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.engine = void 0;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore 7016
-var freemarker_js_1 = require("freemarker.js");
+var freemarker_js_1 = __importDefault(require("freemarker.js"));
 /**
  * render engine
  *
