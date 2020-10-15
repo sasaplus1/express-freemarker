@@ -1,3 +1,4 @@
 module.exports = {
-  require: 'intelli-espower-loader'
+  extension: 'ts',
+  require: 'espower-typescript/guess'
 };
