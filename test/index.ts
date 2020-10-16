@@ -109,16 +109,18 @@ describe('express-freemarker', function () {
               buffer += chunk;
             });
             res.on('end', function () {
-              assert(buffer === '<header>It Works!</header>\n<p>Hello!</p>\n');
-
-              server.close();
-
-              done();
+              try {
+                assert(
+                  buffer === '<header>It Works!</header>\n<p>Hello!</p>\n'
+                );
+                done();
+              } finally {
+                server.close();
+              }
             });
           })
           .on('error', function (err) {
             server.close();
-
             done(err);
           })
           .end();
