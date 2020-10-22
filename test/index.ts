@@ -56,6 +56,35 @@ describe('express-freemarker', function () {
         }
       );
     });
+    it('should render FreeMarker within macro', function (done) {
+      engine(
+        'engine/templates/main/with_macro.ftl',
+        {
+          viewRoot: path.resolve(__dirname),
+          options: {
+            borders: `[
+              header("<#import '/@root/macros/common.ftl' as common>", **/*.ftl)
+            ]`,
+            freemarkerLinks: JSON.stringify({
+              root: [path.resolve(__dirname, 'engine/templates')]
+            })
+          }
+        },
+        {},
+        function (err, html, output) {
+          if (err) {
+            err.message += '\n';
+            err.message += output;
+
+            return done(err);
+          }
+
+          assert(html === '<header>It Works!</header>\n<p>Hello!</p>\n');
+
+          done();
+        }
+      );
+    });
   });
   describe('use with Express', function () {
     it('should response rendered HTML', function (done) {
