@@ -30,7 +30,7 @@ describe('express-freemarker', function () {
     });
     it('should render FreeMarker within include', function (done) {
       engine(
-        'engine/templates/main/index.ftl',
+        'engine/templates/main/with_include.ftl',
         {
           viewRoot: path.resolve(__dirname),
           options: {
