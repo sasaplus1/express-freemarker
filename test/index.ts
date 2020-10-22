@@ -104,6 +104,9 @@ describe('express-freemarker', function () {
           {
             viewRoot,
             options: {
+              borders: `[
+                header("<#import '/@root/macros/common.ftl' as common>", **/*.ftl)
+              ]`,
               freemarkerLinks: JSON.stringify({
                 root: [path.resolve(__dirname, 'engine/templates')]
               })
@@ -119,7 +122,7 @@ describe('express-freemarker', function () {
       app.set('views', path.resolve(__dirname, 'engine/templates'));
 
       app.get('/', function (req, res) {
-        res.render('main/index.ftl', {});
+        res.render('main/express.ftl', { world: 'world' });
       });
 
       const server = app.listen(port, function () {
@@ -140,7 +143,8 @@ describe('express-freemarker', function () {
             res.on('end', function () {
               try {
                 assert(
-                  buffer === '<header>It Works!</header>\n<p>Hello!</p>\n'
+                  buffer ===
+                    '<header>It Works!</header>\n<header>It Works!</header>\n<p>Hello, world!</p>\n'
                 );
                 done();
               } finally {
