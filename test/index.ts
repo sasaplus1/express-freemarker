@@ -28,7 +28,7 @@ describe('express-freemarker', function () {
         }
       );
     });
-    it('should render FreeMarker within include', function (done) {
+    it('should render FreeMarker with include', function (done) {
       engine(
         'engine/templates/main/with_include.ftl',
         {
@@ -56,7 +56,7 @@ describe('express-freemarker', function () {
         }
       );
     });
-    it('should render FreeMarker within macro', function (done) {
+    it('should render FreeMarker with macro', function (done) {
       engine(
         'engine/templates/main/with_macro.ftl',
         {
