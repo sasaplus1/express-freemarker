@@ -5,8 +5,8 @@ WORKDIR /opt/express-freemarker
 # NOTE: https://github.com/nodesource/distributions/blob/master/README.md
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
-RUN apt update --yes && \
-  apt install --yes nodejs && \
+RUN apt-get update --yes && \
+  apt-get install --yes nodejs && \
   npm install --global yarn
 
 COPY ./package.json ./yarn.lock ./
